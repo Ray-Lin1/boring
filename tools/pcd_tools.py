@@ -1,3 +1,4 @@
+from math import cos, sin
 import numpy as np
 import struct
 import os
@@ -82,9 +83,44 @@ class PCDTools:
         h = self.__header_str.split("binary")[0] + "ascii"
         np.savetxt(out, self.pts, fmt="%.3f", header=h, delimiter=" ", comments="")
 
-    def rotation(self):
-        # TODO
-        pass
+    def rotation(self, yaw, pitch, roll):
+        Rx = np.array([
+            [1.0, 0.0, 0.0],
+            [0.0, cos(roll), sin(roll)],
+            [0.0, -sin(roll), cos(roll)]
+        ])
+        Ry = np.array([
+            [cos(pitch), 0.0, -sin(pitch)],
+            [0.0, 1.0, 0.0],
+            [sin(pitch), 0.0, cos(roll)]
+        ])
+        Rz = np.array([
+            [cos(yaw), sin(yaw), 0.0],
+            [-sin(yaw), cos(roll), 0.0],
+            [0.0, 0.0, 1.0]
+        ])
+
+        R = Rz @ Ry @ Rx
+        self.pts[:, :3] = self.pts[:, :3] @ R.T
+        
+        if self.__type == "binary":
+            out = self.__f.split(".pcd")[0] + "_r.pcd"
+            h = self.__header_str.split("ascii")[0] + "binary\n"
+
+            pts_b = bytes()
+            for p in self.pts:
+                for i, v in enumerate(self.__size):
+                    if v == 4:
+                        pts_b += struct.pack("f", p[i])
+                    elif v == 1:
+                        pts_b += struct.pack("B", int(p[i]))
+            with open(out, "wb") as f:
+                f.write(h.encode())
+                f.write(pts_b)
+        else:
+            out = self.__f.split(".pcd")[0] + "_r.pcd"
+            h = self.__header_str.split("binary")[0] + "ascii"
+            np.savetxt(out, self.pts, fmt="%.3f", header=h, delimiter=" ", comments="")
 
     def get_fmt(self):
         self.__fmt = ""
@@ -103,4 +139,5 @@ class PCDTools:
 if __name__ == "__main__":
     filename = "../data/0_ascii.pcd"
     tool = PCDTools(filename)
-    tool.ascii_to_binary()
+    # tool.ascii_to_binary()
+    tool.rotation(1.57, 0.0, 0.0)
