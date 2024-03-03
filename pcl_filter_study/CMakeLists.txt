@@ -1,0 +1,6 @@
+project(PCL_FILTER_STUDY)
+cmake_minimum_required(VERSION 3.10)
+find_package(PCL REQUIRED COMPONENTS io filters)
+add_executable(run main.cpp pcl_filter.cpp)
+include_directories(${PCL_INCLUDE_DIRS})
+target_link_libraries(run ${PCL_LIBRARIES})
