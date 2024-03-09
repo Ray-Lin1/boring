@@ -60,6 +60,8 @@
         "csignal": "cpp",
         "list": "cpp",
         "set": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "*.txx": "cpp",
+        "unordered_set": "cpp"
     }
 }

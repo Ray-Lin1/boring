@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.10)
+project(FPS_DEMO)
+find_package(PCL REQUIRED COMPONENTS filters io)
+add_executable(run main.cpp)
+include_directories(${PCL_INCLUDE_DIRS})
+target_link_libraries(run ${PCL_LIBRARIES})

@@ -1,0 +1,3 @@
+/home/ray/codes/boring/algorihom_by_myself/build/CMakeFiles/rebuild_cache.dir
+/home/ray/codes/boring/algorihom_by_myself/build/CMakeFiles/run.dir
+/home/ray/codes/boring/algorihom_by_myself/build/CMakeFiles/edit_cache.dir
